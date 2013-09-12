@@ -5,7 +5,7 @@ import javax.inject.Inject;
 public class Server{
 
   @Inject
-  private WypeSocket ws;
+  private WypeServerSocket ws;
 	
   public void start(){
 	  
