@@ -5,6 +5,7 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.TargetDataLine;
 
+//EXPERIMENTAL!
 public class WypeAudio{
 	
 	private TargetDataLine targetLine;
