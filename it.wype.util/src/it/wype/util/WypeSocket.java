@@ -1,4 +1,4 @@
-package it.wype.client;
+package it.wype.util;
 
 import java.io.IOException;
 
