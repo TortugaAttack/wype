@@ -1,6 +1,11 @@
 package it.wype.client;
 
+import java.io.IOException;
+import java.io.OutputStream;
+
+import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.TargetDataLine;
@@ -9,6 +14,8 @@ import javax.sound.sampled.TargetDataLine;
 public class WypeAudio{
 	
 	private TargetDataLine targetLine;
+	
+	private OutputStream outStream;
 	
 	
 	private void startMicrophone(){
@@ -35,7 +42,10 @@ public class WypeAudio{
 		catch(LineUnavailableException ex){
 			throw new RuntimeException(ex);
 		}
-		
+	}
+	
+	private void capture(){
+		new Capture().start();
 	}
 	
 	private void closeMicrophone(){
@@ -45,9 +55,18 @@ public class WypeAudio{
 		this.targetLine = null;
 	}
 	
-	private byte[] read(){
-		byte[] data = new byte[targetLine.getBufferSize()/5];
-		this.targetLine.read(data, 0, data.length);
-		return data;
+	class Capture extends Thread{
+		public void run(){
+			try {
+				AudioSystem.write(
+						new AudioInputStream(targetLine),
+						AudioFileFormat.Type.WAVE,
+						outStream
+						);
+			} catch (IOException ex) {
+				throw new RuntimeException(ex);
+			}
+		}
 	}
+	
 }
