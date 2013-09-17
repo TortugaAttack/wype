@@ -41,17 +41,8 @@ public class WypeAudio{
 				bigEndian
 				);
 		
-		Mixer.Info[] mx = AudioSystem.getMixerInfo();
-		int i;
-		for(i=0; i<mx.length; i++){
-			if(mx[i].getName().contains("Mikrofon") && mx[i].getName().contains("4")){
-				break;
-			}
-		}
-		System.out.println(mx[i].getName());
-		
 		try{
-			this.targetLine = AudioSystem.getTargetDataLine(format, mx[i]);
+			this.targetLine = AudioSystem.getTargetDataLine(format);
 			this.targetLine.open();
 			this.targetLine.start();
 		}
