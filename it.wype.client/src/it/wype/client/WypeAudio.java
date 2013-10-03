@@ -97,8 +97,7 @@ public class WypeAudio{
 				AudioSystem.write(
 					new AudioInputStream(targetLine),
 					AudioFileFormat.Type.WAVE,
-					new File("test.wav")
-					//outStream
+					outStream
 					);
 			} catch (IOException ex) {
 				throw new RuntimeException(ex);
@@ -110,8 +109,16 @@ public class WypeAudio{
 		public void run(){
 			Clip cp;
 			try {
-				cp = AudioSystem.getClip(AudioSystem.getMixerInfo()[2]);
-				cp.open(new AudioInputStream(targetLine));
+				Info infoHP = null;
+				String propInfo = WypeProp.parse("client.properties", "speaker");
+				for(Info info : AudioSystem.getMixerInfo()){
+					if(info.toString().equals(propInfo)){
+					infoHP = info;
+					break;
+					}	
+				}
+				cp = AudioSystem.getClip(infoHP);
+				cp.open(new AudioInputStream(inStream));
 			
 			} catch (LineUnavailableException | IOException ex) {
 				throw new RuntimeException(ex);
