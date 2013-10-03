@@ -1,5 +1,7 @@
 package it.wype.client;
 
+import it.wype.util.WypeProp;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,6 +15,7 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.Line;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.Mixer;
+import javax.sound.sampled.Mixer.Info;
 import javax.sound.sampled.TargetDataLine;
 
 //EXPERIMENTAL!
@@ -23,7 +26,14 @@ public class WypeAudio{
 	private OutputStream outStream;
 	
 	private InputStream inStream;
-	
+
+//	TestMain
+//	public static void main(String[] argc){
+//		WypeAudio wv = new WypeAudio();
+//		wv.startMicrophone();
+//		wv.capture();
+//		wv.closeMicrophone();
+//	}
 	
 	private void startMicrophone(){
 		
@@ -41,8 +51,22 @@ public class WypeAudio{
 				bigEndian
 				);
 		
+		Info infoMic = null;
+		String propInfo = WypeProp.parse("client.properties", "microphone");
+		for(Info info : AudioSystem.getMixerInfo()){
+			if(info.toString().equals(propInfo)){
+				infoMic = info;
+				break;
+			}
+		}
+		
 		try{
-			this.targetLine = AudioSystem.getTargetDataLine(format);
+			if(infoMic == null){
+				this.targetLine = AudioSystem.getTargetDataLine(format);
+			}
+			else{
+				this.targetLine = AudioSystem.getTargetDataLine(format, infoMic);
+			}
 			this.targetLine.open();
 			this.targetLine.start();
 		}
