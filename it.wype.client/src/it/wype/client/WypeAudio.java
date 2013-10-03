@@ -117,7 +117,12 @@ public class WypeAudio{
 					break;
 					}	
 				}
-				cp = AudioSystem.getClip(infoHP);
+				if(infoHP == null){
+					cp = AudioSystem.getClip();
+				}
+				else{
+					cp = AudioSystem.getClip(infoHP);
+				}
 				cp.open(new AudioInputStream(inStream));
 			
 			} catch (LineUnavailableException | IOException ex) {
